@@ -4,76 +4,209 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Register - Sentiment Analyzer</title>
-  <link rel="stylesheet" href="/static/css/register.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/main.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .auth-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: calc(100vh - 200px);
+      padding: var(--spacing-xl) 0;
+    }
+    
+    .auth-card {
+      width: 100%;
+      max-width: 500px;
+      animation: fadeIn 0.6s ease-out;
+    }
+    
+    .auth-header {
+      text-align: center;
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .auth-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto var(--spacing-md);
+      background: linear-gradient(135deg, var(--secondary), #db2777);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: white;
+      box-shadow: 0 8px 25px rgba(236, 72, 153, 0.4);
+    }
+    
+    .auth-footer {
+      text-align: center;
+      margin-top: var(--spacing-md);
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.95rem;
+    }
+    
+    .auth-footer a {
+      color: var(--primary-light);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color var(--transition-normal);
+    }
+    
+    .auth-footer a:hover {
+      color: white;
+      text-decoration: underline;
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-md);
+    }
+    
+    @media (max-width: 600px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
+  <header class="main-header">
+    <div class="container">
+      <a href="/home" class="logo">
+        <i class="fas fa-brain"></i> Sentiment Analyzer
+      </a>
+      <nav class="nav-bar">
+        <a href="/home"><i class="fas fa-home"></i> Home</a>
+        <a href="/login"><i class="fas fa-sign-in-alt"></i> Login</a>
+        <a href="/about"><i class="fas fa-info-circle"></i> About</a>
+        <a href="/analyze" class="hidden"><i class="fas fa-magic"></i> Analyze</a>
+        <a href="/history-page" class="hidden"><i class="fas fa-history"></i> History</a>
+        <a href="/login" onclick="localStorage.clear()" class="hidden"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </nav>
+    </div>
+  </header>
 
-<header class="main-header">
-  <div class="container">
-    <h1 class="logo"><i class="fas fa-brain"></i> Sentiment Analyzer</h1>
-    <nav class="nav-bar">
-      <a href="/">Home</a>
-      <a href="/analyze">Analyze</a>
-      <a href="/history-page">History</a>
-      <a href="/about">About</a>
-      <a href="/login" onclick="localStorage.clear()">Logout</a>
-    </nav>
-  </div>
-</header>
+  <main class="auth-container">
+    <div class="card auth-card">
+      <div class="auth-header">
+        <div class="auth-icon">
+          <i class="fas fa-user-plus"></i>
+        </div>
+        <h2 class="card-title">Create Your Account</h2>
+        <p class="card-subtitle">Join us and start analyzing sentiments with AI</p>
+      </div>
+      
+      <form id="registerForm">
+        <div class="form-group">
+          <label for="username">
+            <i class="fas fa-user"></i> Username
+          </label>
+          <input 
+            type="text" 
+            id="username" 
+            class="form-control" 
+            placeholder="Choose a username"
+            required
+            minlength="3"
+            maxlength="50"
+            autocomplete="username"
+          >
+        </div>
 
-<div class="register-card">
-  <h2><i class="fas fa-user-plus"></i> Create Your Account</h2>
-  <p class="register-info">Fill in the form below to register and start analyzing sentiments.</p>
-  <form id="registerForm">
-    <label for="username">Username:</label>
-    <input type="text" id="username" placeholder="Enter your username" required>
+        <div class="form-group">
+          <label for="email">
+            <i class="fas fa-envelope"></i> Email Address
+          </label>
+          <input 
+            type="email" 
+            id="email" 
+            class="form-control" 
+            placeholder="Enter your email"
+            required
+            autocomplete="email"
+          >
+        </div>
 
-    <label for="email">Email:</label>
-    <input type="email" id="email" placeholder="Enter your email" required>
+        <div class="form-group">
+          <label for="password">
+            <i class="fas fa-lock"></i> Password
+          </label>
+          <input 
+            type="password" 
+            id="password" 
+            class="form-control" 
+            placeholder="Choose a strong password (min. 6 characters)"
+            required
+            minlength="6"
+            autocomplete="new-password"
+          >
+        </div>
 
-    <label for="password">Password:</label>
-    <input type="password" id="password" placeholder="Choose a strong password" required>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="date">
+              <i class="fas fa-calendar"></i> Date of Birth
+            </label>
+            <input 
+              type="date" 
+              id="date" 
+              class="form-control" 
+              required
+            >
+          </div>
 
-    <label for="date">Date of Birth:</label>
-    <input type="date" id="date" required>
+          <div class="form-group">
+            <label for="gender">
+              <i class="fas fa-venus-mars"></i> Gender
+            </label>
+            <select id="gender" class="form-control" required>
+              <option value="">Select Gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
 
-    <label for="gender">Gender:</label>
-    <select id="gender" required>
-      <option value="">Select Gender</option>
-      <option value="male">Male</option>
-      <option value="female">Female</option>
-    </select>
+        <button type="submit" class="btn btn-secondary btn-full btn-lg">
+          <i class="fas fa-paper-plane"></i> Create Account
+        </button>
+      </form>
+      
+      <p class="auth-footer">
+        Already have an account? <a href="/login">Login here</a>
+      </p>
+    </div>
+  </main>
 
-    <button type="submit"><i class="fas fa-paper-plane"></i> Register</button>
-  </form>
-  <p class="register-footer">Already have an account? <a href="/login">Login here</a></p>
-</div>
+  <footer class="main-footer">
+    <div class="container">
+      <p>© 2025 Sentiment Analyzer. All rights reserved.</p>
+    </div>
+  </footer>
 
-<footer class="main-footer">
-  <div class="container">
-    <p>© 2025 Sentiment Analyzer. All rights reserved.</p>
-  </div>
-</footer>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const token = localStorage.getItem("token");
 
+      if (!token) {
+        const analyze = document.querySelector('a[href="/analyze"]');
+        const history = document.querySelector('a[href="/history-page"]');
+        const logout = document.querySelector('a[href="/login"]');
 
-<!--// ✅ كود لإخفاء روابط معينة (Analyze, History, Logout)  -->
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const token = localStorage.getItem("token");
+        if (analyze) analyze.classList.add("hidden");
+        if (history) history.classList.add("hidden");
+        if (logout) logout.classList.add("hidden");
+      }
+    });
+  </script>
 
-    if (!token) {
-      const analyze = document.querySelector('a[href="/analyze"]');
-      const history = document.querySelector('a[href="/history-page"]');
-      const logout = document.querySelector('a[href="/login"]');
-
-      if (analyze) analyze.style.display = "none";
-      if (history) history.style.display = "none";
-      if (logout) logout.style.display = "none";
-    }
-  });
-</script>
-
-<script src="/static/js/register.js"></script>
+  <script src="/static/js/register.js"></script>
 </body>
 </html>

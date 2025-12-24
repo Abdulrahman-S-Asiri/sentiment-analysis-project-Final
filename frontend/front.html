@@ -4,64 +4,197 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sentiment Analyzer - Home</title>
-  <link rel="stylesheet" href="/static/css/front.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/main.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .hero-section {
+      text-align: center;
+      padding: var(--spacing-xl) 0;
+      min-height: 70vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .hero-title {
+      font-family: var(--font-heading);
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800;
+      color: white;
+      margin-bottom: var(--spacing-md);
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero-subtitle {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: var(--spacing-xl);
+      max-width: 600px;
+      line-height: 1.6;
+    }
+    
+    .hero-buttons {
+      display: flex;
+      gap: var(--spacing-md);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--spacing-lg);
+      margin-top: var(--spacing-xl);
+    }
+    
+    .feature-card {
+      text-align: center;
+      padding: var(--spacing-lg);
+    }
+    
+    .feature-icon {
+      width: 70px;
+      height: 70px;
+      margin: 0 auto var(--spacing-md);
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: white;
+      box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+    }
+    
+    .feature-title {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: var(--spacing-xs);
+    }
+    
+    .feature-description {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+  </style>
 </head>
 <body>
+  <header class="main-header">
+    <div class="container">
+      <a href="/home" class="logo">
+        <i class="fas fa-brain"></i> Sentiment Analyzer
+      </a>
+      <nav class="nav-bar">
+        <a href="/home"><i class="fas fa-home"></i> Home</a>
+        <a href="/analyze" class="hidden"><i class="fas fa-magic"></i> Analyze</a>
+        <a href="/history-page" class="hidden"><i class="fas fa-history"></i> History</a>
+        <a href="/about"><i class="fas fa-info-circle"></i> About</a>
+        <a href="#" id="logoutBtn" class="hidden"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </nav>
+    </div>
+  </header>
 
-<header class="main-header">
-  <div class="container">
-    <h1 class="logo"><i class="fas fa-brain"></i> Sentiment Analyzer</h1>
-    <nav class="nav-bar">
-      <a href="/">Home</a>
-      <a href="/analyze">Analyze</a>
-      <a href="/history-page">History</a>
-      <a href="/about">About</a>
-      <a href="#" id="logoutBtn">Logout</a>
-    </nav>
-  </div>
-</header>
+  <main class="container">
+    <div class="hero-section fade-in">
+      <h1 class="hero-title">
+        <i class="fas fa-brain"></i> Sentiment Analyzer
+      </h1>
+      <p class="hero-subtitle">
+        Discover the emotions hidden in your text with our powerful AI-powered sentiment analysis tool. 
+        Get instant insights into the emotional tone of any text.
+      </p>
+      
+      <div class="hero-buttons">
+        <a href="/register" class="btn btn-primary btn-lg">
+          <i class="fas fa-rocket"></i> Get Started
+        </a>
+        <a href="/login" class="btn btn-secondary btn-lg">
+          <i class="fas fa-sign-in-alt"></i> Login
+        </a>
+      </div>
+    </div>
 
-<main class="container front-main">
-  <div class="welcome-card">
-    <h2 class="front-title">Welcome to Sentiment Analyzer</h2>
-    <p class="front-subtitle">Instantly detect emotions in text using powerful AI technology. Begin your analysis today!</p>
-    <a href="/register" class="btn primary"><i class="fas fa-rocket"></i> Get Started</a>
-  </div>
-</main>
+    <div class="features-grid">
+      <div class="card feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-robot"></i>
+        </div>
+        <h3 class="feature-title">AI-Powered Analysis</h3>
+        <p class="feature-description">
+          Advanced machine learning models analyze text to detect 7 different emotions with high accuracy.
+        </p>
+      </div>
 
-<footer class="main-footer">
-  <div class="container">
-    <p>© 2025 Sentiment Analyzer. All rights reserved.</p>
-  </div>
-</footer>
+      <div class="card feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-bolt"></i>
+        </div>
+        <h3 class="feature-title">Real-Time Results</h3>
+        <p class="feature-description">
+          Get instant sentiment analysis results with confidence scores in seconds.
+        </p>
+      </div>
 
-<!-- ✅ كود التحكم في الروابط وتسجيل الدخول -->
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const token = localStorage.getItem("token");
+      <div class="card feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h3 class="feature-title">History Tracking</h3>
+        <p class="feature-description">
+          Keep track of all your analyses and monitor emotional trends over time.
+        </p>
+      </div>
 
-    const analyze = document.querySelector('a[href="/analyze"]');
-    const history = document.querySelector('a[href="/history-page"]');
-    const logoutBtn = document.getElementById("logoutBtn");
+      <div class="card feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <h3 class="feature-title">Secure & Private</h3>
+        <p class="feature-description">
+          Your data is encrypted and stored securely. Your privacy is our priority.
+        </p>
+      </div>
+    </div>
+  </main>
 
-    if (!token) {
-      // لو مو مسجل دخول، نخفي بعض الروابط
-      if (analyze) analyze.style.display = "none";
-      if (history) history.style.display = "none";
-      if (logoutBtn) logoutBtn.style.display = "none";
-    } else {
-      // تفعيل زر تسجيل الخروج
-      if (logoutBtn) {
-        logoutBtn.addEventListener("click", (e) => {
-          e.preventDefault();
-          localStorage.removeItem("token");
-          window.location.href = "/login";
-        });
+  <footer class="main-footer">
+    <div class="container">
+      <p>© 2025 Sentiment Analyzer. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const token = localStorage.getItem("token");
+      const analyze = document.querySelector('a[href="/analyze"]');
+      const history = document.querySelector('a[href="/history-page"]');
+      const logoutBtn = document.getElementById("logoutBtn");
+
+      if (!token) {
+        if (analyze) analyze.classList.add("hidden");
+        if (history) history.classList.add("hidden");
+        if (logoutBtn) logoutBtn.classList.add("hidden");
+      } else {
+        if (logoutBtn) {
+          logoutBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            localStorage.removeItem("token");
+            window.location.href = "/login";
+          });
+        }
       }
-    }
-  });
-</script>
-
+    });
+  </script>
 </body>
 </html>

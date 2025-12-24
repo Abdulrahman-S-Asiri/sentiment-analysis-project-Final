@@ -8,6 +8,14 @@ from fastapi.openapi.utils import get_openapi
 from pydantic import BaseModel
 from pathlib import Path
 import os
+import logging
+
+# ✅ إعداد logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 # ✅ تحميل .env
 from dotenv import load_dotenv
@@ -17,17 +25,18 @@ load_dotenv(dotenv_path=ENV_PATH)
 
 # ✅ استدعاء قاعدة البيانات والراوترات
 from backend.database import Base, engine
-from backend.routers import auth, predict_router, history_router
+from backend.routers import auth, predict_router, history_router, admin_router
 
 # ✅ إنشاء التطبيق
 app = FastAPI(title="Sentiment Analysis API", version="1.0.0")
 
-# ✅ إعداد CORS
+# ✅ إعداد CORS (يمكن تخصيصه من متغيرات البيئة)
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:8000,http://127.0.0.1:8000").split(",")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,  # ✅ تقييد الأصول المسموحة
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["*"],
 )
 
@@ -36,12 +45,17 @@ app.mount("/static", StaticFiles(directory="frontend/static"), name="static")
 templates = Jinja2Templates(directory="frontend")
 
 # ✅ إنشاء الجداول
-Base.metadata.create_all(bind=engine)
+try:
+    Base.metadata.create_all(bind=engine)
+    logger.info("✅ Database tables created successfully")
+except Exception as e:
+    logger.error(f"❌ Error creating database tables: {str(e)}")
 
 # ✅ تسجيل الراوترات
 app.include_router(auth.router, prefix="/auth", tags=["Auth"])
 app.include_router(history_router.router, prefix="/history", tags=["History"])
 app.include_router(predict_router.router, prefix="/predict", tags=["Prediction"])
+app.include_router(admin_router.router, tags=["Admin"])
 
 # ✅ تعديل واجهة التوثيق (Swagger UI) لدعم Bearer Token
 def custom_openapi():
@@ -82,15 +96,7 @@ def root():
 def health():
     return {"status": "ok", "env": os.getenv("APP_ENV")}
 
-@app.post("/predict")
-def predict(payload: TextIn):
-    text = payload.text
-    # TODO: اربط نموذجك الحقيقي هنا
-    return {
-        "input": text,
-        "label": "neutral",
-        "scores": {"neutral": 0.80, "happiness": 0.10, "sadness": 0.10},
-    }
+# ✅ تم حذف endpoint المكرر - يتم التعامل معه من خلال predict_router
 
 # ✅ صفحات HTML
 @app.get("/home", response_class=HTMLResponse)
@@ -116,3 +122,7 @@ def history_page(request: Request):
 @app.get("/about", response_class=HTMLResponse)
 def about_page(request: Request):
     return templates.TemplateResponse("about.html", {"request": request})
+
+@app.get("/admin", response_class=HTMLResponse)
+def admin_page(request: Request):
+    return templates.TemplateResponse("admin.html", {"request": request})

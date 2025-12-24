@@ -2,6 +2,7 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from torch.nn.functional import softmax
 import torch
 import os
+import json
 
 # تحديد مسار مجلد النموذج
 MODEL_PATH = os.path.join(os.path.dirname(__file__), "../model")
@@ -15,16 +16,26 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model.to(device)
 model.eval()
 
-# mapping للنتائج الرقمية → أسماء المشاعر
-id2label = {
-    0: "joy",
-    1: "sadness",
-    2: "anger",
-    3: "fear",
-    4: "surprise",
-    5: "disgust",
-    6: "neutral"
-}
+# ✅ قراءة التسميات من ملف config.json للنموذج لضمان التطابق
+CONFIG_PATH = os.path.join(MODEL_PATH, "config.json")
+try:
+    with open(CONFIG_PATH, "r", encoding="utf-8") as f:
+        config = json.load(f)
+        # تحويل id2label من النموذج إلى dictionary
+        id2label_dict = config.get("id2label", {})
+        id2label = {int(k): v for k, v in id2label_dict.items()}
+except Exception as e:
+    # في حالة فشل القراءة، استخدام القيم الافتراضية من النموذج
+    print(f"⚠️ Warning: Could not read config.json, using model's id2label: {e}")
+    id2label = {
+        0: "happiness",  # ✅ تطابق مع config.json
+        1: "sadness",
+        2: "anger",
+        3: "fear",
+        4: "surprise",
+        5: "disgust",
+        6: "neutral"
+    }
 
 # دالة توقع المشاعر + الثقة
 def predict_emotion(text: str) -> dict:

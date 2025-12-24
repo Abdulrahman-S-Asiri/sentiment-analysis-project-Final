@@ -4,10 +4,10 @@ from datetime import datetime, timedelta
 from backend.database import Base
 import enum
 
-# ✅ تعريف Enum للمشاعر
+# ✅ تعريف Enum للمشاعر (يجب أن يتطابق مع النموذج)
 class SentimentEnum(enum.Enum):
     sadness = "sadness"
-    joy = "joy"
+    happiness = "happiness"  # ✅ تغيير من "joy" إلى "happiness" لتطابق النموذج
     anger = "anger"
     fear = "fear"
     neutral = "neutral"
@@ -24,6 +24,9 @@ class User(Base):
     password = Column(String(100), nullable=False)
     date = Column(Date, nullable=False)
     gender = Column(String(10), nullable=False)
+    role = Column(String(20), default="user", nullable=False)  # ✅ إضافة role: admin أو user
+    is_active = Column(String(10), default="active", nullable=False)  # ✅ active أو inactive
+    created_at = Column(DateTime, default=lambda: datetime.utcnow() + timedelta(hours=3))
 
     sentiments = relationship("SentimentResult", back_populates="user")
 
@@ -33,7 +36,8 @@ class SentimentResult(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     text = Column(String(1000), nullable=False)
-    sentiment = Column(Enum(SentimentEnum), nullable=False)
+    # ✅ Enum في SQLite يتم تحويله تلقائياً إلى String
+    sentiment = Column(Enum(SentimentEnum, native_enum=False), nullable=False)
     confidence = Column(Float, nullable=True)  # إذا أضفتها سابقًا
     timestamp = Column(DateTime, default=lambda: datetime.utcnow() + timedelta(hours=3))  # ✅ الوقت السعودي
 

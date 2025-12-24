@@ -4,69 +4,198 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>History - Sentiment Analyzer</title>
-  <link rel="stylesheet" href="/static/css/history.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/main.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    .history-header {
+      text-align: center;
+      margin-bottom: var(--spacing-xl);
+    }
+    
+    .history-header h2 {
+      font-family: var(--font-heading);
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: white;
+      margin-bottom: var(--spacing-sm);
+    }
+    
+    .history-header p {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 1.1rem;
+    }
+    
+    .history-container {
+      display: grid;
+      gap: var(--spacing-md);
+    }
+    
+    .history-item {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: var(--spacing-md);
+      align-items: start;
+      padding: var(--spacing-md);
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--glass-shadow);
+      transition: all var(--transition-normal);
+    }
+    
+    .history-item:hover {
+      transform: translateX(8px);
+      box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.5);
+    }
+    
+    .history-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+    
+    .history-content {
+      flex: 1;
+    }
+    
+    .history-text {
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: var(--spacing-xs);
+      word-break: break-word;
+      font-size: 1rem;
+    }
+    
+    .history-meta {
+      display: flex;
+      gap: var(--spacing-md);
+      flex-wrap: wrap;
+      margin-top: var(--spacing-xs);
+    }
+    
+    .history-sentiment {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    
+    .history-date {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+    }
+    
+    .history-confidence {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.85rem;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: var(--spacing-xl);
+      color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .empty-state i {
+      font-size: 4rem;
+      margin-bottom: var(--spacing-md);
+      opacity: 0.5;
+    }
+    
+    .loading-state {
+      text-align: center;
+      padding: var(--spacing-xl);
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .loading-state i {
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  </style>
 </head>
 <body>
+  <header class="main-header">
+    <div class="container">
+      <a href="/home" class="logo">
+        <i class="fas fa-brain"></i> Sentiment Analyzer
+      </a>
+      <nav class="nav-bar">
+        <a href="/home"><i class="fas fa-home"></i> Home</a>
+        <a href="/analyze"><i class="fas fa-magic"></i> Analyze</a>
+        <a href="/history-page"><i class="fas fa-history"></i> History</a>
+        <a href="/about"><i class="fas fa-info-circle"></i> About</a>
+        <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </nav>
+    </div>
+  </header>
 
-<header class="main-header">
-  <div class="container">
-    <h1 class="logo"><i class="fas fa-brain"></i> Sentiment Analyzer</h1>
-    <nav class="nav-bar">
-      <a href="/">Home</a>
-      <a href="/analyze">Analyze</a>
-      <a href="/history-page">History</a>
-      <a href="/about">About</a>
-      <a href="#" id="logoutBtn">Logout</a>
-    </nav>
-  </div>
-</header>
+  <main class="container">
+    <div class="history-header fade-in">
+      <h2>
+        <i class="fas fa-history"></i> Analysis History
+      </h2>
+      <p>View all your sentiment analysis results</p>
+    </div>
 
-<main class="container">
-  <h2><i class="fas fa-history"></i> My Sentiment History</h2>
-  <p class="history-info">Here you can view all your sentiment analysis results.</p>
-  <div id="historyContainer" class="history-container">
-    <!-- This will be populated with history items from JS -->
-  </div>
-</main>
+    <div id="historyContainer" class="history-container">
+      <div class="loading-state">
+        <i class="fas fa-spinner"></i>
+        <p>Loading your history...</p>
+      </div>
+    </div>
+  </main>
 
-<footer class="main-footer">
-  <div class="container">
-    <p>© 2025 Sentiment Analyzer. All rights reserved.</p>
-  </div>
-</footer>
+  <footer class="main-footer">
+    <div class="container">
+      <p>© 2025 Sentiment Analyzer. All rights reserved.</p>
+    </div>
+  </footer>
 
-<!-- ✅ سكربت التحقق من التوكن + التحكم في التنقل -->
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const token = localStorage.getItem("token");
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const token = localStorage.getItem("token");
+      const logoutBtn = document.getElementById("logoutBtn");
+      const analyze = document.querySelector('a[href="/analyze"]');
+      const history = document.querySelector('a[href="/history-page"]');
 
-    const analyze = document.querySelector('a[href="/analyze"]');
-    const history = document.querySelector('a[href="/history-page"]');
-    const logoutBtn = document.getElementById("logoutBtn");
-
-    // المستخدم مو مسجل دخول؟ نرجعه للـ login
-    if (!token) {
-      window.location.href = "/login";
-      return;
-    }
-
-    // فعل زر الخروج
-    if (logoutBtn) {
-      logoutBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        localStorage.removeItem("token");
+      if (!token) {
         window.location.href = "/login";
-      });
-    }
+        return;
+      }
 
-    // عرض روابط التنقل المخصصة
-    if (analyze) analyze.style.display = "inline-block";
-    if (history) history.style.display = "inline-block";
-    if (logoutBtn) logoutBtn.style.display = "inline-block";
-  });
-</script>
+      if (logoutBtn) {
+        logoutBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          localStorage.removeItem("token");
+          window.location.href = "/login";
+        });
+      }
 
-<script src="/static/js/history.js"></script>
+      if (analyze) analyze.style.display = "inline-block";
+      if (history) history.style.display = "inline-block";
+      if (logoutBtn) logoutBtn.style.display = "inline-block";
+    });
+  </script>
+
+  <script src="/static/js/history.js"></script>
 </body>
 </html>

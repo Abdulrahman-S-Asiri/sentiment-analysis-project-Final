@@ -4,9 +4,13 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from backend import database, models, schemas
 import os
+import logging
 from dotenv import load_dotenv
 
 load_dotenv()
+
+# ✅ إعداد logging
+logger = logging.getLogger(__name__)
 
 router = APIRouter(
     tags=["History"]
@@ -30,11 +34,15 @@ def get_user_history(
         results = db.query(models.SentimentResult).filter(
             models.SentimentResult.user_id == user_id
         ).order_by(models.SentimentResult.timestamp.desc()).all()
+        
+        logger.info(f"✅ Retrieved {len(results)} history records for user {user_id}")
         return results
 
+    except HTTPException:
+        raise
     except JWTError:
+        logger.warning("❌ Invalid JWT token in history endpoint")
         raise HTTPException(status_code=401, detail="Invalid token")
-
     except Exception as e:
-        print("🔥 Error loading history:", repr(e))  # ← هذا يعرض الخطأ
-        raise HTTPException(status_code=500, detail=str(e))  # ← هذا يوصله للواجهة
+        logger.error(f"❌ Error loading history: {str(e)}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Internal server error")

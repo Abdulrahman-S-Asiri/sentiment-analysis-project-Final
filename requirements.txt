@@ -1,7 +1,7 @@
 fastapi
 uvicorn
 sqlalchemy
-pymysql
+# pymysql  # ✅ تمت إزالته - نستخدم SQLite الآن
 passlib[bcrypt]
 python-jose
 transformers
@@ -17,4 +17,4 @@ bcrypt
 python-dotenv
 pytest
 httpx
-git-filter-repo
+# git-filter-repo  # ✅ غير مطلوب للتطبيق

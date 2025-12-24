@@ -2,19 +2,29 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-from urllib.parse import quote_plus
+import os
+from pathlib import Path
+from dotenv import load_dotenv
 
-# بيانات الاتصال بقاعدة البيانات
-DATABASE_USERNAME = "root"
-DATABASE_PASSWORD = quote_plus("Qq@z1122")  # تأمين الباسورد بالترميز
-DATABASE_HOST = "localhost"
-DATABASE_NAME = "sentiment_db"
+# ✅ تحميل متغيرات البيئة
+load_dotenv()
 
-# رابط الاتصال باستخدام pymysql
-DATABASE_URL = f"mysql+pymysql://{DATABASE_USERNAME}:{DATABASE_PASSWORD}@{DATABASE_HOST}/{DATABASE_NAME}"
+# ✅ تحديد مسار ملف قاعدة البيانات SQLite
+BASE_DIR = Path(__file__).resolve().parent.parent
+DATABASE_FILE = os.getenv("DATABASE_FILE", "sentiment_db.sqlite")
+DATABASE_PATH = BASE_DIR / DATABASE_FILE
 
-# إنشاء محرك قاعدة البيانات
-engine = create_engine(DATABASE_URL, echo=True)
+# ✅ رابط الاتصال باستخدام SQLite
+# check_same_thread=False مطلوب لـ SQLite مع FastAPI
+DATABASE_URL = f"sqlite:///{DATABASE_PATH}"
+
+# ✅ إنشاء محرك قاعدة البيانات
+# connect_args={"check_same_thread": False} مطلوب لـ SQLite مع FastAPI
+engine = create_engine(
+    DATABASE_URL,
+    echo=True,
+    connect_args={"check_same_thread": False}  # ✅ مطلوب لـ SQLite
+)
 
 # إعداد الجلسة
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -31,8 +41,12 @@ def get_db():
         db.close()
 
 # اختبار الاتصال بقاعدة البيانات (اختياري)
+import logging
+logger = logging.getLogger(__name__)
+
 try:
     with engine.connect() as connection:
-        print("Connection to the database is successful!")
+        logger.info(f"✅ SQLite database connection successful! Database file: {DATABASE_PATH}")
 except Exception as e:
-    print(f"Error: {e}")
+    logger.error(f"❌ Database connection error: {e}")
+    # لا نرفع الاستثناء هنا حتى لا يمنع التطبيق من البدء

@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Sentiment Analyzer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/main.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    .admin-container {
+      padding: var(--spacing-lg) 0;
+    }
+    
+    .admin-header {
+      text-align: center;
+      margin-bottom: var(--spacing-xl);
+    }
+    
+    .admin-header h1 {
+      font-family: var(--font-heading);
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: white;
+      margin-bottom: var(--spacing-sm);
+      background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .admin-header p {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 1.1rem;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-xl);
+    }
+    
+    .stat-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-md);
+      text-align: center;
+      transition: all var(--transition-normal);
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.5);
+    }
+    
+    .stat-icon {
+      font-size: 2.5rem;
+      margin-bottom: var(--spacing-xs);
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .stat-value {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: var(--spacing-xs);
+    }
+    
+    .stat-label {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+    }
+    
+    .admin-tabs {
+      display: flex;
+      gap: var(--spacing-sm);
+      margin-bottom: var(--spacing-lg);
+      flex-wrap: wrap;
+      border-bottom: 2px solid var(--glass-border);
+      padding-bottom: var(--spacing-sm);
+    }
+    
+    .tab-btn {
+      padding: var(--spacing-sm) var(--spacing-lg);
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.7);
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: var(--radius-md) var(--radius-md) 0 0;
+      transition: all var(--transition-normal);
+      position: relative;
+    }
+    
+    .tab-btn.active {
+      color: white;
+      background: var(--glass-bg);
+    }
+    
+    .tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--primary);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.3s ease-out;
+    }
+    
+    .data-table {
+      width: 100%;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    
+    .table-header {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      padding: var(--spacing-md);
+      background: rgba(255, 255, 255, 0.05);
+      font-weight: 600;
+      color: white;
+      border-bottom: 1px solid var(--glass-border);
+    }
+    
+    .table-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      padding: var(--spacing-md);
+      border-bottom: 1px solid var(--glass-border);
+      color: rgba(255, 255, 255, 0.9);
+      transition: background var(--transition-normal);
+      align-items: center;
+    }
+    
+    .table-row:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .table-row:last-child {
+      border-bottom: none;
+    }
+    
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    
+    .badge-admin {
+      background: rgba(236, 72, 153, 0.2);
+      border: 1px solid var(--secondary);
+      color: var(--secondary);
+    }
+    
+    .badge-user {
+      background: rgba(99, 102, 241, 0.2);
+      border: 1px solid var(--primary);
+      color: var(--primary);
+    }
+    
+    .badge-active {
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid var(--success);
+      color: var(--success);
+    }
+    
+    .badge-inactive {
+      background: rgba(107, 114, 128, 0.2);
+      border: 1px solid #6b7280;
+      color: #6b7280;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: var(--spacing-xs);
+      flex-wrap: wrap;
+    }
+    
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.85rem;
+    }
+    
+    .btn-danger {
+      background: linear-gradient(135deg, var(--danger), #dc2626);
+      color: white;
+    }
+    
+    .btn-warning {
+      background: linear-gradient(135deg, var(--warning), #d97706);
+      color: white;
+    }
+    
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    
+    .loading-overlay.active {
+      display: flex;
+    }
+    
+    .loading-spinner {
+      width: 60px;
+      height: 60px;
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: var(--spacing-xl);
+      color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .sentiment-chart {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: var(--spacing-md);
+      margin-top: var(--spacing-md);
+    }
+    
+    .sentiment-chart-item {
+      text-align: center;
+      padding: var(--spacing-md);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+    }
+    
+    .sentiment-chart-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: white;
+      margin: var(--spacing-xs) 0;
+    }
+    
+    .sentiment-chart-label {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="main-header">
+    <div class="container">
+      <a href="/home" class="logo">
+        <i class="fas fa-brain"></i> Sentiment Analyzer
+      </a>
+      <nav class="nav-bar">
+        <a href="/home"><i class="fas fa-home"></i> Home</a>
+        <a href="/analyze"><i class="fas fa-magic"></i> Analyze</a>
+        <a href="/history-page"><i class="fas fa-history"></i> History</a>
+        <a href="/admin"><i class="fas fa-shield-alt"></i> Admin</a>
+        <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container admin-container">
+    <div class="admin-header fade-in">
+      <h1>
+        <i class="fas fa-shield-alt"></i> Admin Dashboard
+      </h1>
+      <p>Manage users, analyses, and view system statistics</p>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="stats-grid fade-in" id="statsGrid">
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-users"></i></div>
+        <div class="stat-value" id="totalUsers">-</div>
+        <div class="stat-label">Total Users</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-user-check"></i></div>
+        <div class="stat-value" id="activeUsers">-</div>
+        <div class="stat-label">Active Users</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+        <div class="stat-value" id="totalAnalyses">-</div>
+        <div class="stat-label">Total Analyses</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-calendar-day"></i></div>
+        <div class="stat-value" id="todayAnalyses">-</div>
+        <div class="stat-label">Today's Analyses</div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="admin-tabs">
+      <button class="tab-btn active" data-tab="users">
+        <i class="fas fa-users"></i> Users Management
+      </button>
+      <button class="tab-btn" data-tab="analyses">
+        <i class="fas fa-chart-bar"></i> All Analyses
+      </button>
+      <button class="tab-btn" data-tab="sentiments">
+        <i class="fas fa-heart"></i> Sentiment Statistics
+      </button>
+    </div>
+
+    <!-- Users Tab -->
+    <div id="usersTab" class="tab-content active">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="fas fa-users"></i> All Users
+          </h3>
+        </div>
+        <div id="usersTable" class="data-table">
+          <div class="table-header">
+            <div>ID</div>
+            <div>Username</div>
+            <div>Email</div>
+            <div>Role</div>
+            <div>Status</div>
+            <div>Analyses</div>
+            <div>Actions</div>
+          </div>
+          <div id="usersList" class="table-body">
+            <div class="loading-state" style="text-align: center; padding: var(--spacing-xl);">
+              <i class="fas fa-spinner fa-spin"></i> Loading users...
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Analyses Tab -->
+    <div id="analysesTab" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="fas fa-chart-bar"></i> All Analyses
+          </h3>
+        </div>
+        <div id="analysesTable" class="data-table">
+          <div class="table-header">
+            <div>ID</div>
+            <div>Text</div>
+            <div>Sentiment</div>
+            <div>Confidence</div>
+            <div>User</div>
+            <div>Date</div>
+            <div>Actions</div>
+          </div>
+          <div id="analysesList" class="table-body">
+            <div class="loading-state" style="text-align: center; padding: var(--spacing-xl);">
+              <i class="fas fa-spinner fa-spin"></i> Loading analyses...
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sentiments Tab -->
+    <div id="sentimentsTab" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="fas fa-heart"></i> Sentiment Distribution
+          </h3>
+        </div>
+        <div id="sentimentChart" class="sentiment-chart">
+          <div class="loading-state" style="text-align: center; padding: var(--spacing-xl);">
+            <i class="fas fa-spinner fa-spin"></i> Loading statistics...
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="main-footer">
+    <div class="container">
+      <p>© 2025 Sentiment Analyzer. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <script src="/static/js/admin.js"></script>
+</body>
+</html>
+

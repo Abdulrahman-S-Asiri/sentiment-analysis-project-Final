@@ -1,7 +1,7 @@
 document.getElementById("registerForm").addEventListener("submit", async function (e) {
   e.preventDefault();
 
-  const btn = this.querySelector("button");
+  const btn = this.querySelector("button[type='submit']");
   const originalText = btn.innerHTML;
 
   // استرجاع البيانات
@@ -13,46 +13,52 @@ document.getElementById("registerForm").addEventListener("submit", async functio
 
   // تحقق بسيط من المدخلات
   if (!username || !email || !password || !date || !gender) {
-    return alert("⚠️ Please fill in all fields.");
+    alert("⚠️ Please fill in all fields.");
+    return;
   }
 
   // التحقق من صحة البريد الإلكتروني
   const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
   if (!emailPattern.test(email)) {
-    return alert("⚠️ Please enter a valid email.");
+    alert("⚠️ Please enter a valid email address.");
+    return;
   }
 
   // التحقق من قوة كلمة المرور
-  if (password.length < 8) {
-    return alert("⚠️ Password must be at least 8 characters long.");
+  if (password.length < 6) {
+    alert("⚠️ Password must be at least 6 characters long.");
+    return;
   }
 
   // عرض التحميل
   btn.disabled = true;
-  btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Registering...`;
+  btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Creating Account...`;
 
   try {
     const response = await fetch("/auth/register", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json" 
+      },
       body: JSON.stringify({ username, email, password, date, gender })
     });
 
     const result = await response.json();
 
     if (response.ok) {
-      alert("✅ Account created successfully! Redirecting to login...");
-      window.location.href = "/login";
+      btn.innerHTML = `<i class="fas fa-check"></i> Success! Redirecting...`;
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 1000);
     } else {
-      alert("❌ " + (result.detail || "Registration failed."));
+      alert("❌ " + (result.detail || "Registration failed. Please try again."));
+      btn.disabled = false;
+      btn.innerHTML = originalText;
     }
   } catch (error) {
     console.error("Registration error:", error);
-    alert("❌ Something went wrong. Please try again.");
-  } finally {
-    // إعادة الزر لحالته الطبيعية
+    alert("❌ Network error. Please check your connection and try again.");
     btn.disabled = false;
     btn.innerHTML = originalText;
   }
 });
-
