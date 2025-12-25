@@ -16,7 +16,7 @@
 بعد تشغيل `migrate_database.py`، تم إنشاء مستخدم admin:
 
 - **Email:** `admin@admin.com`
-- **Password:** `admin123`
+- **Password:** [Set by admin]
 - **Role:** `admin`
 
 ⚠️ **مهم جداً:** قم بتغيير كلمة المرور بعد أول تسجيل دخول!
@@ -29,7 +29,7 @@
 1. افتح: http://127.0.0.1:8000/login
 2. أدخل:
    - Email: `admin@admin.com`
-   - Password: `admin123`
+   - Password: [Set by admin]
 3. بعد تسجيل الدخول، ستظهر لك روابط Admin
 
 ### 2. الوصول المباشر:

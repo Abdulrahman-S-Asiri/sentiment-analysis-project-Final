@@ -58,7 +58,7 @@
 
 **Admin User:**
 - Email: `admin@admin.com`
-- Password: `admin123`
+- Password: [Set by admin]
 
 ⚠️ **غير كلمة المرور بعد أول تسجيل دخول!**
 
@@ -70,7 +70,7 @@
 ```
 1. افتح: http://127.0.0.1:8000/login
 2. Email: admin@admin.com
-3. Password: admin123
+3. Password: [Set by admin]
 4. بعد تسجيل الدخول، ستظهر روابط Admin
 ```
 

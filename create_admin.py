@@ -49,8 +49,7 @@ def create_admin():
         
         print("✅ Admin user created successfully!")
         print(f"   Email: admin@admin.com")
-        print(f"   Password: admin123")
-        print(f"   ⚠️ Please change the password after first login!")
+        print(f"   ⚠️ Please change the admin password after first login!")
         
     except Exception as e:
         db.rollback()
