@@ -1,103 +1,105 @@
-# 🔐 دليل صفحة Admin | Admin Dashboard Guide
+# Admin Dashboard Guide
 
-**التاريخ:** 2025-01-27  
-**الحالة:** ✅ **جاهزة للاستخدام**
 
----
-
-## 🎯 نظرة عامة
-
-تم إنشاء صفحة Admin احترافية مع جميع الصلاحيات المطلوبة لإدارة التطبيق بالكامل.
 
 ---
 
-## 👤 بيانات تسجيل الدخول الافتراضية
 
-بعد تشغيل `migrate_database.py`، تم إنشاء مستخدم admin:
+## Overview
+
+The Admin page provides all permissions required to manage the application completely.
+
+---
+
+
+## Default Admin Login
+
+After running `migrate_database.py`, an admin user is created:
 
 - **Email:** `admin@admin.com`
 - **Password:** [Set by admin]
 - **Role:** `admin`
 
-⚠️ **مهم جداً:** قم بتغيير كلمة المرور بعد أول تسجيل دخول!
+⚠️ Change the password after the first login!
 
 ---
 
-## 🚀 كيفية الوصول
 
-### 1. تسجيل الدخول كـ Admin:
-1. افتح: http://127.0.0.1:8000/login
-2. أدخل:
+## How to Access
+
+### 1. Login as Admin:
+1. Open: http://127.0.0.1:8000/login
+2. Enter:
    - Email: `admin@admin.com`
    - Password: [Set by admin]
-3. بعد تسجيل الدخول، ستظهر لك روابط Admin
+3. After login, Admin links will appear
 
-### 2. الوصول المباشر:
+### 2. Direct Access:
 - http://127.0.0.1:8000/admin
 
 ---
 
 ## 📊 الميزات المتاحة
 
-### 1. 📈 Dashboard Statistics
-- **إجمالي المستخدمين:** عدد جميع المستخدمين
-- **المستخدمين النشطين:** عدد المستخدمين النشطين
-- **إجمالي التحليلات:** عدد جميع التحليلات
-- **تحليلات اليوم:** عدد التحليلات اليوم
+### 1. Dashboard Statistics
+- **Total users:** Number of all users
+- **Active users:** Number of active users
+- **Total analyses:** Number of all analyses
+- **Today's analyses:** Number of analyses today
 
-### 2. 👥 إدارة المستخدمين (Users Management)
+### 2. Users Management
 
-#### عرض جميع المستخدمين:
-- قائمة بجميع المستخدمين مع تفاصيلهم
-- عرض: ID, Username, Email, Role, Status, عدد التحليلات
+#### View all users:
+- List of all users with details
+- Shows: ID, Username, Email, Role, Status, Number of analyses
 
-#### الصلاحيات المتاحة:
-- ✅ **عرض تفاصيل المستخدم:** View Details
-- ✅ **تغيير Role:** تحويل من user إلى admin أو العكس
-- ✅ **تفعيل/تعطيل المستخدم:** Activate/Deactivate
-- ✅ **حذف المستخدم:** Delete (مع حذف جميع تحليلاته)
+#### Permissions:
+- ✅ **View user details**
+- ✅ **Change Role** (user ↔ admin)
+- ✅ **Activate/Deactivate user**
+- ✅ **Delete user** (with all analyses)
 
-### 3. 📊 إدارة التحليلات (All Analyses)
+### 3. Analyses Management
 
-#### عرض جميع التحليلات:
-- قائمة بجميع التحليلات من جميع المستخدمين
-- عرض: ID, Text, Sentiment, Confidence, User, Date
+#### View all analyses:
+- List of all analyses from all users
+- Shows: ID, Text, Sentiment, Confidence, User, Date
 
-#### الصلاحيات المتاحة:
-- ✅ **حذف تحليل:** Delete any analysis
-- ✅ **عرض تفاصيل:** View full analysis details
+#### Permissions:
+- ✅ **Delete analysis**
+- ✅ **View full analysis details**
 
-### 4. 💚 إحصائيات المشاعر (Sentiment Statistics)
+### 4. Sentiment Statistics
 
-#### توزيع المشاعر:
-- عرض عدد كل مشاعر في النظام
-- Chart مرئي مع Emojis
-- إحصائيات دقيقة
+#### Sentiment distribution:
+- Shows the count of each sentiment in the system
+- Visual chart with Emojis
+- Accurate statistics
 
 ---
 
-## 🔐 نظام الصلاحيات
+## Permissions System
 
 ### Admin Role:
-- ✅ الوصول لصفحة Admin
-- ✅ عرض جميع المستخدمين
-- ✅ تعديل صلاحيات المستخدمين
-- ✅ تفعيل/تعطيل المستخدمين
-- ✅ حذف المستخدمين
-- ✅ عرض جميع التحليلات
-- ✅ حذف أي تحليل
-- ✅ عرض الإحصائيات
+- ✅ Access Admin page
+- ✅ View all users
+- ✅ Edit user permissions
+- ✅ Activate/Deactivate users
+- ✅ Delete users
+- ✅ View all analyses
+- ✅ Delete any analysis
+- ✅ View statistics
 
-### User Role (عادي):
-- ❌ لا يمكن الوصول لصفحة Admin
-- ✅ يمكنه فقط استخدام الميزات العادية
+### User Role (regular):
+- ❌ Cannot access Admin page
+- ✅ Can only use regular features
 
 ---
 
-## 🛠️ API Endpoints للـ Admin
+## 🛠️ Admin API Endpoints
 
 ### Statistics:
-- `GET /admin/stats` - الحصول على إحصائيات شاملة
+- `GET /admin/stats` - Get all statistics
 
 ### User Management:
 - `GET /admin/users` - قائمة جميع المستخدمين

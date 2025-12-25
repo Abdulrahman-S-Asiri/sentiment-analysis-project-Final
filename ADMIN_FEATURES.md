@@ -1,4 +1,4 @@
-# 🔐 صفحة Admin - الميزات والصلاحيات
+# Admin Page - Features & Permissions
 
 **التاريخ:** 2025-01-27  
 **الحالة:** ✅ **جاهزة للاستخدام**
@@ -7,7 +7,7 @@
 
 ## ✅ ما تم إنجازه
 
-### 1. نظام الصلاحيات
+### 1. Permissions System
 - ✅ إضافة `role` للمستخدمين (admin/user)
 - ✅ إضافة `is_active` (active/inactive)
 - ✅ إضافة `created_at` لتاريخ الإنشاء
@@ -24,7 +24,7 @@
 - ✅ `/admin/analyses/{id}` (DELETE) - حذف تحليل
 - ✅ `/admin/analyses/user/{id}` (DELETE) - حذف تحليلات مستخدم
 
-### 3. صفحة Admin (`frontend/admin.html`)
+### 3. Admin Page (`frontend/admin.html`)
 - ✅ Dashboard مع إحصائيات
 - ✅ Tabs للتنقل
 - ✅ Users Management Table
@@ -45,7 +45,7 @@
 - ✅ Delete analysis
 - ✅ View user details
 
-### 5. الأمان
+### 5. Security
 - ✅ Admin-only access verification
 - ✅ Token-based authentication
 - ✅ Role checking in every request
@@ -54,61 +54,61 @@
 
 ---
 
-## 👤 بيانات تسجيل الدخول
+## Admin Login Info
 
 **Admin User:**
 - Email: `admin@admin.com`
 - Password: [Set by admin]
 
-⚠️ **غير كلمة المرور بعد أول تسجيل دخول!**
+⚠️ Change the password after the first login!
 
 ---
 
-## 🚀 كيفية الاستخدام
+## How to Use
 
-### 1. تسجيل الدخول كـ Admin:
+### 1. Login as Admin:
 ```
-1. افتح: http://127.0.0.1:8000/login
+1. Open: http://127.0.0.1:8000/login
 2. Email: admin@admin.com
 3. Password: [Set by admin]
-4. بعد تسجيل الدخول، ستظهر روابط Admin
+4. After login, Admin links will appear
 ```
 
-### 2. الوصول لصفحة Admin:
+### 2. Access Admin Page:
 ```
 http://127.0.0.1:8000/admin
 ```
 
 ---
 
-## 📊 الميزات المتاحة
+## Available Features
 
 ### Dashboard Statistics:
-- إجمالي المستخدمين
-- المستخدمين النشطين
-- إجمالي التحليلات
-- تحليلات اليوم
+- Total users
+- Active users
+- Total analyses
+- Today's analyses
 
 ### Users Management:
-- ✅ عرض جميع المستخدمين
-- ✅ عرض تفاصيل مستخدم
-- ✅ تغيير role (user ↔ admin)
-- ✅ تفعيل/تعطيل مستخدم
-- ✅ حذف مستخدم (مع تحليلاته)
+- ✅ View all users
+- ✅ View user details
+- ✅ Change role (user ↔ admin)
+- ✅ Activate/Deactivate user
+- ✅ Delete user (with analyses)
 
 ### Analyses Management:
-- ✅ عرض جميع التحليلات
-- ✅ حذف أي تحليل
-- ✅ عرض تفاصيل التحليل
+- ✅ View all analyses
+- ✅ Delete any analysis
+- ✅ View analysis details
 
 ### Sentiment Statistics:
-- ✅ توزيع المشاعر
-- ✅ إحصائيات مرئية
-- ✅ Charts مع Emojis
+- ✅ Sentiment distribution
+- ✅ Visual statistics
+- ✅ Charts with Emojis
 
 ---
 
-## 🔒 الأمان
+## Security
 
 - ✅ Admin-only access
 - ✅ Token verification
@@ -118,16 +118,14 @@ http://127.0.0.1:8000/admin
 
 ---
 
-## ✅ الخلاصة
+## Summary
 
-**صفحة Admin جاهزة بالكامل!**
+All admin features and permissions are available:
+- ✅ User management
+- ✅ Analyses management
+- ✅ Statistics
+- ✅ Professional design
+- ✅ Enhanced security
 
-جميع الميزات والصلاحيات متاحة:
-- ✅ إدارة المستخدمين
-- ✅ إدارة التحليلات
-- ✅ الإحصائيات
-- ✅ تصميم احترافي
-- ✅ أمان محسن
-
-**الوصول:** http://127.0.0.1:8000/admin
+**Access:** http://127.0.0.1:8000/admin
 
