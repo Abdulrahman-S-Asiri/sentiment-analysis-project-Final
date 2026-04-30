@@ -64,10 +64,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     results.forEach((item, index) => {
-      const sentiment = item.sentiment.toLowerCase();
-      const emoji = sentimentEmojis[sentiment] || "😐";
-      const color = sentimentColors[sentiment] || "#6b7280";
-      const confidence = Math.round((item.confidence || item.score || 0) * 100);
+      const emotions = item.emotions || [{ label: item.sentiment, confidence: item.confidence || 0 }];
+      const topEmotion = emotions[0] || { label: item.sentiment, confidence: 0 };
+      const emoji = sentimentEmojis[topEmotion.label] || "😐";
+      const color = sentimentColors[topEmotion.label] || "#6b7280";
       const date = new Date(item.timestamp);
       const formattedDate = date.toLocaleDateString("en-US", {
         year: "numeric",
@@ -88,12 +88,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         <div class="history-content">
           <div class="history-text">"${item.text}"</div>
           <div class="history-meta">
-            <span class="history-sentiment" style="background: ${color}20; border: 1px solid ${color}; color: ${color};">
-              <i class="fas fa-heart"></i> ${sentiment.charAt(0).toUpperCase() + sentiment.slice(1)}
-            </span>
-            <span class="history-confidence">
-              <i class="fas fa-chart-line"></i> ${confidence}% confidence
-            </span>
+            ${emotions.map(e => {
+              const ec = sentimentColors[e.label] || "#6b7280";
+              const ee = sentimentEmojis[e.label] || "😐";
+              const epct = Math.round(e.confidence * 100);
+              return `<span class="history-sentiment" style="background:${ec}20; border:1px solid ${ec}; color:${ec};">
+                ${ee} ${e.label} (${epct}%)
+              </span>`;
+            }).join("")}
             <span class="history-date">
               <i class="fas fa-clock"></i> ${formattedDate}
             </span>

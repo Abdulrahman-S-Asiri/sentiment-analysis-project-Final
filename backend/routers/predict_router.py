@@ -4,8 +4,9 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from backend import schemas, models, database
-from backend.load_model import predict_emotion
+from backend.load_model import predict_emotion, explain_emotions
 import os
+import json
 import logging
 from dotenv import load_dotenv
 
@@ -15,7 +16,6 @@ load_dotenv()
 logger = logging.getLogger(__name__)
 
 router = APIRouter(
-    prefix="/predict",
     tags=["Prediction"]
 )
 
@@ -38,26 +38,18 @@ def predict(
         if user_id is None:
             raise HTTPException(status_code=401, detail="Invalid token")
 
-        # ✅ تحليل النص باستخدام النموذج
+        # ✅ تحليل النص باستخدام النموذج (multi-label)
         result_data = predict_emotion(input.text)
-        sentiment = result_data["label"]
-        confidence = result_data["confidence"]
+        emotions = result_data["emotions"]
 
-        # ✅ التحقق من أن المشاعر موجودة في Enum
-        try:
-            sentiment_enum = models.SentimentEnum[sentiment]
-        except KeyError:
-            logger.error(f"❌ Invalid sentiment label from model: {sentiment}")
-            raise HTTPException(
-                status_code=500, 
-                detail=f"Model returned invalid sentiment: {sentiment}"
-            )
+        top_emotion = emotions[0] if emotions else {"label": "neutral", "confidence": 0.0}
 
         # ✅ تخزين النتيجة في قاعدة البيانات
         result = models.SentimentResult(
             text=input.text,
-            sentiment=sentiment_enum,
-            confidence=confidence,
+            sentiment=top_emotion["label"],
+            confidence=top_emotion["confidence"],
+            emotions_json=json.dumps(emotions),
             user_id=user_id,
             timestamp=datetime.utcnow() + timedelta(hours=3)
         )
@@ -65,16 +57,28 @@ def predict(
         db.add(result)
         db.commit()
         db.refresh(result)
-        
-        logger.info(f"✅ Prediction saved for user {user_id}: {sentiment} (confidence: {confidence:.2f})")
 
-        return {
-            "text": input.text,
-            "sentiment": sentiment,
-            "score": confidence,
-            "confidence": confidence,
-            "timestamp": result.timestamp
-        }
+        logger.info(f"✅ Prediction saved for user {user_id}: {[e['label'] for e in emotions]}")
+
+        # SHAP explanations (computed after DB write; if it fails, result still valid)
+        explanations = {}
+        try:
+            explanations = explain_emotions(input.text, emotions)
+            if explanations:
+                result.explanations_json = json.dumps(explanations)
+                db.commit()
+        except Exception as e:
+            logger.warning(f"SHAP explanation failed (non-fatal): {e}")
+
+        return schemas.SentimentResponse(
+            text=input.text,
+            sentiment=top_emotion["label"],
+            score=top_emotion["confidence"],
+            confidence=top_emotion["confidence"],
+            emotions=emotions,
+            explanations=explanations,
+            timestamp=result.timestamp
+        )
 
     except HTTPException:
         raise

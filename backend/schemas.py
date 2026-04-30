@@ -80,7 +80,7 @@ class Token(BaseModel):
 # 🔹 إدخال نص للتحليل
 class TextInput(BaseModel):
     text: str
-    
+
     @field_validator('text')
     @classmethod
     def validate_text(cls, v: str) -> str:
@@ -90,12 +90,25 @@ class TextInput(BaseModel):
             raise ValueError("Text cannot exceed 1000 characters")
         return v.strip()
 
+
+class EmotionResult(BaseModel):
+    label: str
+    confidence: float
+
+
+class TokenImportance(BaseModel):
+    token: str
+    importance: float
+
+
 # 🔹 استجابة تحليل المشاعر
 class SentimentResponse(BaseModel):
     text: str
     sentiment: str
     score: Optional[float] = None
     confidence: Optional[float] = None
+    emotions: list[EmotionResult] = []
+    explanations: dict[str, list[TokenImportance]] = {}
     timestamp: datetime
 
     class Config:

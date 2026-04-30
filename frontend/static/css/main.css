@@ -563,3 +563,107 @@ select.form-control {
 .hidden {
   display: none !important;
 }
+
+/* ============================================
+   🏷️ Multi-Emotion Badges
+   ============================================ */
+.emotions-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+  justify-content: center;
+}
+
+.emotion-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border: 1px solid;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all var(--transition-fast);
+}
+
+.emotion-badge:hover {
+  transform: scale(1.05);
+}
+
+/* ============================================
+   🔬 SHAP Explanation Area
+   ============================================ */
+.explanation-area {
+  margin-top: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-border);
+}
+
+.explanation-header {
+  margin-bottom: var(--spacing-sm);
+}
+
+.explanation-header h4 {
+  color: rgba(255, 255, 255, 0.9);
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+
+.emotion-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 8px 0;
+}
+
+.emotion-tab {
+  padding: 4px 14px;
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.8);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.emotion-tab:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.emotion-tab.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+.highlighted-text {
+  line-height: 2.2;
+  padding: var(--spacing-sm);
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-sm);
+  word-break: break-word;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.shap-token {
+  display: inline;
+  padding: 2px 6px;
+  margin: 2px;
+  border-radius: 4px;
+  cursor: help;
+  transition: transform var(--transition-fast);
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.shap-token:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+}

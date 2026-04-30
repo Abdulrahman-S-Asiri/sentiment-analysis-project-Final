@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Enum, Date, Float
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Enum, Date, Float, Text
 from sqlalchemy.orm import relationship
 from datetime import datetime, timedelta
 from backend.database import Base
@@ -36,9 +36,10 @@ class SentimentResult(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     text = Column(String(1000), nullable=False)
-    # ✅ Enum في SQLite يتم تحويله تلقائياً إلى String
-    sentiment = Column(Enum(SentimentEnum, native_enum=False), nullable=False)
-    confidence = Column(Float, nullable=True)  # إذا أضفتها سابقًا
+    sentiment = Column(String(50), nullable=False)
+    confidence = Column(Float, nullable=True)
+    emotions_json = Column(Text, nullable=True)
+    explanations_json = Column(Text, nullable=True)
     timestamp = Column(DateTime, default=lambda: datetime.utcnow() + timedelta(hours=3))  # ✅ الوقت السعودي
 
     user_id = Column(Integer, ForeignKey("users.id"))

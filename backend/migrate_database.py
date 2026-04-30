@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 import sqlite3
 
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from backend.database import DATABASE_PATH, engine
 from backend import models
@@ -54,7 +54,25 @@ def migrate_database():
         # Update existing users to have default values
         cursor.execute("UPDATE users SET role = 'user' WHERE role IS NULL")
         cursor.execute("UPDATE users SET is_active = 'active' WHERE is_active IS NULL")
-        
+
+        # Check sentiment_results table columns
+        cursor.execute("PRAGMA table_info(sentiment_results)")
+        sr_columns = [col[1] for col in cursor.fetchall()]
+
+        if 'emotions_json' not in sr_columns:
+            print("Adding 'emotions_json' column...")
+            cursor.execute("ALTER TABLE sentiment_results ADD COLUMN emotions_json TEXT")
+            print("[OK] Added 'emotions_json' column")
+        else:
+            print("[OK] 'emotions_json' column already exists")
+
+        if 'explanations_json' not in sr_columns:
+            print("Adding 'explanations_json' column...")
+            cursor.execute("ALTER TABLE sentiment_results ADD COLUMN explanations_json TEXT")
+            print("[OK] Added 'explanations_json' column")
+        else:
+            print("[OK] 'explanations_json' column already exists")
+
         conn.commit()
         print("\n[OK] Database migration completed successfully!")
         
