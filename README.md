@@ -41,15 +41,23 @@
 ## Overview
 
 This is a **Sentiment Analysis Web Application** built with **FastAPI (Backend)** and a simple **HTML/CSS/JS Frontend**.
-It allows users to input English text and get the **predicted sentiment** using a trained deep learning model (LSTM/BERT).
+It accepts English text and returns emotion predictions using a saved RoBERTa-architecture checkpoint. The repository includes GoEmotions training and evaluation code, but no recorded training run or checkpoint provenance establishes how the saved weights were produced.
 
 ## Features
 
 - 🔑 User Authentication (Login & Register)
-- 📝 Sentiment Prediction (7 Categories: sadness, disappointment, anger, neutral, happiness, excitement, gratitude)
+- 📝 Emotion Prediction (7 configured categories: happiness, sadness, anger, fear, surprise, disgust, neutral)
 - 📊 History Tracking (stores past analyses)
 - 🌐 Simple Web Interface
 - 🗄️ Database Integration
+
+
+## Known Model Documentation Limits
+
+- The saved configuration uses a different label order from the training script and inference configuration. Runtime prediction uses the saved configuration; the correct mapping cannot be verified without training provenance.
+- The saved configuration has six layers, while the training script defaults to a twelve-layer base. The original base model and the completed training run are not documented.
+- The saved temperature is 1.0, leaving logits unchanged in the current scaling calculation. This does not establish calibration history or quality.
+- The repository includes evaluation code but not verified numerical training or evaluation results.
 
 ## Project Structure
 
@@ -69,7 +77,7 @@ sentiment-analysis-project-Final
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/D7oomyalasere/sentiment-analysis-project-Final.git
+   git clone https://github.com/Abdulrahman-S-Asiri/sentiment-analysis-project-Final.git
    cd sentiment-analysis-project-Final
    ```
 2. **Create and activate virtual environment**
@@ -101,6 +109,6 @@ sentiment-analysis-project-Final
 This project is still under development and can be improved with:
 
 - Advanced frontend (React/Vue)
-- Better model (Transformer-based like BERT)
+- Reproducible checkpoint provenance and verified evaluation results
 - Deployment online (Heroku, Render, etc.)
 * Deployment online (Heroku, Render, etc.).
